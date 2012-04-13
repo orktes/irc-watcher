@@ -1,0 +1,15 @@
+{
+    "name": "irc-watcher"
+  , "version": "0.0.1"
+  , "description": "Ircbot that records and creates thumbnails of converstation"
+  , "keywords": []
+  , "author": "Jaakko Lukkari <jaakko.lukkari@gmail.com>"
+  , "dependencies": {
+     "redis":"0.7.1"
+    , "irc":"0.3.3"
+    , "express":"2.5.9"
+    , "thumbbot":"0.1.0"
+  }
+  , "main": "index"
+  , "engines": { "node": "0.4.x" }
+}
