@@ -11,7 +11,7 @@ app.get('/messages/', function(req, res, next){
   var skip = req.query.skip || 0;
   var limit =  req.query.limit || 20;
 
-  var search = req.query.search;
+  var search = req.query.s;
 
   if (search == undefined) {
     repositories.messages.getMessages(skip, limit, function (err, data) {
@@ -22,7 +22,13 @@ app.get('/messages/', function(req, res, next){
       res.send({data: {messages: data, skip: skip, limit: limit}, status: 'ok'});
     });
   } else {
-    
+    repositories.messages.searchMessages(search, function (err, data) {
+      if (err) {
+        return next(err);
+      }
+      
+      res.send({data: {messages: data, search: search}, status: 'ok'});
+    });
   }
 });
 
@@ -84,6 +90,53 @@ app.get('/messages/type/:type', function(req, res, next){
     }
 
     res.send({data: {messages: data, skip: skip, limit: limit}, status: 'ok'});
+  });
+});
+
+app.get('/messages/:id', function(req, res, next){
+  var id = req.params.id;
+  var baf = req.query.baf;
+
+  repositories.messages.getMessage(id, function (err, data) {
+    if (err) {
+      return next(err);
+    }
+
+    if (baf) {
+      // TODO LOAD MESSAGES BEFORE AND AFTER (BAF) THIS MESSAGE... TIME IS DEFINED IN THE baf variable
+    } else {
+      res.send({data: data, status: 'ok'});
+    }
+  });
+});
+
+app.get('/tags', function(req, res, next){
+  repositories.messages.getTags(function (err, data) {
+    if (err) {
+      return next(err);
+    }
+
+    res.send({data: {tags: data}, status: 'ok'});
+  });
+});
+
+app.get('/tos', function(req, res, next){
+  repositories.messages.getTos(function (err, data) {
+    if (err) {
+      return next(err);
+    }
+
+    res.send({data: {tos: data}, status: 'ok'});
+  });
+});
+
+app.get('/types', function(req, res, next){
+  repositories.messages.getTypes(function (err, data) {
+    if (err) {
+      return next(err);
+    }
+
+    res.send({data: {types: data}, status: 'ok'});
   });
 });
 
