@@ -1,7 +1,10 @@
 var express = require('express');
 var irc = require('./lib/irc');
+var sio = require('socket.io');
 var repositories = require('./lib/repositories');
 var settings = require('./lib/settings');
+var RedisEventEmitter = require('./lib/rediseventemitter').EventEmitter;
+var eventEmitter = new RedisEventEmitter("messages");
 
 var app = express.createServer();
 
@@ -175,5 +178,34 @@ app.get('/types', function(req, res, next) {
   });
 });
 
+app.get('/ui/sidenav', function (req, res, next) {
+  var calls = 0;
+  var data = {};
+  function createCallback(name) {
+    return function (err, result) {
+      calls++;
+      data[name] = result;
+
+      if (calls == 3) {
+        res.send({data: data, status: 'ok'});
+      }
+    }
+  }
+
+  repositories.messages.getTypes(createCallback('types'));
+  repositories.messages.getTos(createCallback('tos'));
+  repositories.messages.getTags(createCallback('tags'));
+});
+
 app.listen(settings.http.port);
 irc.client.init();
+
+var io = sio.listen(app);
+io.sockets.on('connection', function (socket) {
+  console.log("Socket connected");
+});
+
+
+eventEmitter.on('new_message', function (message) {
+  io.sockets.emit('new_message', message);
+});
