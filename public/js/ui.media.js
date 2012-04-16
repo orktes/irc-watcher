@@ -12,9 +12,27 @@
       website: {
         icon: "/img/icons/vimeo.png",
         createElement: function (url, msg) {
+
+          if (url.metadata && url.metadata.description && url.metadata.description.length > 450) {
+            url.metadata.fullDescription = url.metadata.description;
+            url.metadata.description = url.metadata.description.substring(0, 450) + "...";
+          }
+          
           var html = tmpl($('#media-website-template').html(), {url: url, msg: msg});
-          var element = $(html);
-          return element;
+          var media = $(html);
+
+          media.find('a').click(function (e) {
+
+            var item = $(this);
+            var action = item.data('action');
+
+            if (action == "show-full-description") {
+              e.preventDefault();
+              media.find('.description-text').html(url.metadata.fullDescription);
+            }
+          });
+
+          return media;
         }
       },
       youtube: {

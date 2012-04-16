@@ -13,6 +13,60 @@
     addMessage: function (msg, prepend) {
       var self = this;
 
+      if (prepend) {
+
+        function increment(item, value) {
+          item = $(item);
+          var count = Number(item.find('a').data('count')) + 1;
+          item.find('a').data('count', count);
+          item.find('a').data('last-used', new Date());
+          item.find('a').html(value + " (" + count + ")");
+        }
+
+        function add(type, value) {
+          var item = $("<li><a></a></li>");
+          item.addClass(type + "-" + value.replace("#", ""));
+          item.find('a').data({
+            action: "filter",
+            filter: 'to',
+            count: 1,
+            "last-used": (new Date()).toString()
+          });
+          item.find('a').attr("href", "#!/" + type + "/" + value);
+          item.find('a').html(value + " (1)");
+          $("." + type + "s").after(item);
+        }
+
+        var to = msg.to;
+
+        var item = $('.to-' + to.replace("#", ""))[0];
+
+        if (item) {
+          increment(item, to);
+        } else {
+          add("to", to);
+        }
+
+        $.each(msg.tags, function (idx, tag) {
+          item = $('.tag-' + tag)[0];
+          if (item) {
+            increment(item, tag);
+          } else {
+            add("tag", tag);
+          }
+        });
+
+        $.each(msg.urls, function (idx, url) {
+          item = $('.type-' + url.type)[0];
+          if (item) {
+            increment(item, url.type);
+          } else {
+            add("type", url.type);
+          }
+        });
+
+      }
+
       if (this.filterType != 'all') {
         switch (this.filterType) {
           case "tag":
@@ -48,7 +102,6 @@
             break;
         }
       }
-
 
       this.messageCount++;
       var messages = $('.messages');

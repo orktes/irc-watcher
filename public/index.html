@@ -44,20 +44,20 @@
     <!-- Le fav and touch icons -->
     <script id="side-nav-template" type="text/template">
         <ul class="nav nav-list">
-            <li class="nav-header">Channels</li>
+            <li class="nav-header tos">Channels</li>
             <% for(var i = 0; i < tos.length; i++) { %>
-            <li><a href="#!/to/<%=tos[i].name%>" data-action="filter" data-filter="to" data-count="<%=tos[i].count%>"
-                   data-last-used="<%=tos[i].lastUsed%>"><%=tos[i].name%></a></li>
+            <li class="to-<%=tos[i].name.replace("#", "")%>"><a href="#!/to/<%=tos[i].name%>" data-action="filter" data-filter="to" data-count="<%=tos[i].count%>"
+                   data-last-used="<%=tos[i].lastUsed%>"><%=tos[i].name%> (<%=tos[i].count%>)</a></li>
             <% } %>
-            <li class="nav-header">Tags</li>
+            <li class="nav-header tags">Tags</li>
             <% for(var i = 0; i < tags.length; i++) { %>
-            <li><a href="#!/tag/<%=tags[i].name%>" data-action="filter" data-filter="tag"
-                   data-count="<%=tags[i].count%>" data-last-used="<%=tags[i].lastUsed%>"><%=tags[i].name%></a></li>
+            <li class="tag-<%=tags[i].name%>"><a href="#!/tag/<%=tags[i].name%>" data-action="filter" data-filter="tag"
+                   data-count="<%=tags[i].count%>" data-last-used="<%=tags[i].lastUsed%>"><%=tags[i].name%> (<%=tags[i].count%>)</a></li>
             <% } %>
-            <li class="nav-header">Types</li>
+            <li class="nav-header types">Types</li>
             <% for(var i = 0; i < types.length; i++) { %>
-            <li><a href="#!/type/<%=types[i].name%>" data-action="filter" data-filter="type"
-                   data-count="<%=types[i].count%>" data-last-used="<%=types[i].lastUsed%>"><%=types[i].name%></a></li>
+            <li class="type-<%=types[i].name%>"><a href="#!/type/<%=types[i].name%>" data-action="filter" data-filter="type"
+                   data-count="<%=types[i].count%>" data-last-used="<%=types[i].lastUsed%>"><%=types[i].name%> (<%=types[i].count%>)</a></li>
             <% } %>
         </ul>
     </script>
@@ -83,7 +83,21 @@
     </script>
     <script id="media-website-template" type="text/template">
         <div class="media">
-            <a target="_blank" href="<%=url.url%>"><img src="/img/thumbnails/<%=msg.id%>.png"/></a>
+            <div class="row">
+                <div class="span3">
+                    <a target="_blank" href="<%=url.url%>">
+                        <img src="<%=((url.metadata && url.metadata.image) ? url.metadata.image : ('/img/thumbnails/' + msg.id + '.png'))%>"/>
+                    </a>
+                </div>
+                <div class="span3 description">
+                    <h4><%=((url.metadata && url.metadata.title) ? url.metadata.title : "")%></h4>
+
+                    <p class="description-text"><%=((url.metadata && url.metadata.description) ? url.metadata.description : "")%></p>
+                    <% if (url.metadata && url.metadata.fullDescription) { %>
+                    <a href="#" data-action="show-full-description">Show full description</a>
+                    <% } %>
+                </div>
+            </div>
         </div>
     </script>
     <script id="media-image-template" type="text/template">
