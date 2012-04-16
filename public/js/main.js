@@ -20,5 +20,14 @@ $(function () {
   socket.on('new_message', function (msg) {
     ui.addMessage(msg, true);
   });
- 
+
+
+  function prettyTime() {
+    var item = $('.pretty-time');
+    item.html(window.utils.convertDateToText(item.data('ts')));
+  }
+
+  setInterval(prettyTime, 1000 * 60);
+  prettyTime();
+
 });

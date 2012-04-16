@@ -29,6 +29,10 @@
             max-width: 266px;
         }
 
+        .message .time {
+            float: right;
+        }
+
     </style>
     <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
 
@@ -61,51 +65,52 @@
         <div class="media">
             <div class="row">
                 <div class="span3">
-                    <a href="#" data-action="play" data-type="<%=url.metadata.content.type%>" data-src="<%=encodeURI(url.metadata.content.src)%>"><img src="<%=url.metadata.thumbnail%>" /></a>
+                    <a href="#" data-action="play" data-type="<%=url.metadata.content.type%>"
+                       data-src="<%=encodeURI(url.metadata.content.src)%>"><img src="<%=url.metadata.thumbnail%>"/></a>
                 </div>
                 <div class="span3 description">
                     <h4><%=url.metadata.title%></h4>
-                    <p><%=url.metadata.description%></p>
+
+                    <p class="description-text"><%=url.metadata.description%></p>
+                    <% if (url.metadata.fullDescription) { %>
+                    <a href="#" data-action="show-full-description">Show full description</a>
+                    <% } %>
+
+
                 </div>
             </div>
         </div>
     </script>
     <script id="media-website-template" type="text/template">
         <div class="media">
-            <a target="_blank" href="<%=url.url%>"><img src="/img/thumbnails/<%=msg.id%>.png" /></a>
+            <a target="_blank" href="<%=url.url%>"><img src="/img/thumbnails/<%=msg.id%>.png"/></a>
         </div>
     </script>
     <script id="media-image-template" type="text/template">
         <div class="media">
-            <a target="_blank" href="<%=url.url%>"><img src="<%=url.url%>" /></a>
+            <a target="_blank" href="<%=url.url%>"><img src="<%=url.url%>"/></a>
         </div>
     </script>
     <script id="special-message-template" type="text/template">
         <div class="message">
-            <div class="row">
-                <div class="span1 message-icon"><img src="<%=icon%>"/></div>
-                <div class="span8">
-                    <div class="row">
-                        <div class="from"><%=from%>@<a href="#!/to/<%=to%>"><%=to%></a></div>
-                        <div class="message"><%=msg%></div>
-                    </div>
+
+                    <div class="time pretty-time" data-ts="<%=ts%>"><%=utils.convertDateToText(ts)%></div>
+                    <div class="from"><%=from%>@<a href="#!/to/<%=to%>"><%=to%></a></div>
+                    <div class="message"><%=msg%></div>
                     <% if (urls.length > 0) { %>
-                    <div class="row urls well">
+                    <div class="urls well">
 
                     </div>
                     <% } %>
-                </div>
-
-            </div>
             <hr/>
         </div>
     </script>
     <script id="message-template" type="text/template">
         <div class="message">
-            <div class="row">
-                <div class="span8">...</div>
-                <hr/>
-            </div>
+
+                    <div class="time pretty-time" data-ts="<%=ts%>"><%=utils.convertDateToText(ts)%></div>
+                    <div class="from"><%=from%>@<a href="#!/to/<%=to%>"><%=to%></a></div>
+                    <div class="message"><%=msg%></div>
             <hr/>
         </div>
     </script>
@@ -126,8 +131,8 @@
 
             <div class="nav-collapse">
                 <ul class="nav">
-                    <li class="active"><a href="#!/special">Special</a></li>
-                    <li><a href="#!/all">All messages</a></li>
+                    <li class="active menu-item menu-item-special"><a href="#!/special">Special</a></li>
+                    <li class="menu-item menu-item-all"><a href="#!/all">All messages</a></li>
                 </ul>
             </div>
             <!--/.nav-collapse -->

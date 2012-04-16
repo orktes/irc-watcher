@@ -12,9 +12,48 @@
     },
     addMessage: function (msg, prepend) {
       var self = this;
+
+      if (this.filterType != 'all') {
+        switch (this.filterType) {
+          case "tag":
+            if ($.inArray(this.filterValue, msg.tags) === -1) {
+              return false;
+            }
+            break;
+          case "to":
+            if (msg.to != this.filterValue) {
+              return false;
+            }
+            break;
+          case "type":
+            var found = false;
+
+            $.each(msg.urls, function (indx, url) {
+              if (url.type == self.filterValue) {
+                found = true;
+              }
+            });
+
+            if (!found) {
+              return false;
+            }
+            break;
+          case "special":
+            if (!msg.s) {
+              return false;
+            }
+            break;
+          case "search":
+            return false;
+            break;
+        }
+      }
+
+
       this.messageCount++;
       var messages = $('.messages');
       var element;
+      msg.msg = $("<div></div>").text(msg.msg).html();
       if (msg.s) { // Special message
         if (msg.urls.length > 0) {
           msg.icon = this.media[msg.urls[0].type].icon;
@@ -69,6 +108,8 @@
       var skip = this.messageCount;
       var path = "";
 
+      $('.menu-item').removeClass('active');
+
       switch (this.filterType) {
         case "tag":
         case "type":
@@ -76,9 +117,11 @@
           path = "/messages/" + this.filterType + "/" + encodeURIComponent(this.filterValue);
           break;
         case "all":
+          $('.menu-item-all').addClass('active');
           path = "/messages/";
           break;
         case "special":
+          $('.menu-item-special').addClass('active');
           path = "/messages/special"
           break;
         case "single":

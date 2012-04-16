@@ -20,10 +20,16 @@
       youtube: {
         icon: "/img/icons/vimeo.png",
         createElement: function (url, msg) {
-          var html = tmpl($('#media-youtube-template').html(), {url: url, msg: msg});
-          var element = $(html);
 
-          element.find('a').click(function (e) {
+          if (url.metadata.description.length > 450) {
+            url.metadata.fullDescription = url.metadata.description;
+            url.metadata.description = url.metadata.description.substring(0, 450) + "...";
+          }
+
+          var html = tmpl($('#media-youtube-template').html(), {url: url, msg: msg});
+          var media = $(html);
+
+          media.find('a').click(function (e) {
 
 
             var item = $(this);
@@ -49,11 +55,14 @@
                 break;
               }
 
+            } else if (action == "show-full-description") {
+              e.preventDefault();
+              media.find('.description-text').html(url.metadata.fullDescription);
             }
 
           });
 
-          return element;
+          return media;
         }
       },
       vimeo: {
