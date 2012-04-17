@@ -23,8 +23,9 @@ $(function () {
 
 
   function prettyTime() {
-    var item = $('.pretty-time');
-    item.html(window.utils.convertDateToText(item.data('ts')));
+    $('.pretty-time').each(function (indx, item) {
+      $(item).html(window.utils.convertDateToText(item.data('ts')));
+    });
   }
 
   setInterval(prettyTime, 1000 * 60);
