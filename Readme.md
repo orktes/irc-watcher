@@ -1,7 +1,6 @@
-
 # irc-watcher
 
-  Ircbot that records and creates thumbnails of converstation
+  Ircbot that records and creates thumbnails of conversations
 
 ## License 
 
