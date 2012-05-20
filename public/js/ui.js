@@ -111,7 +111,7 @@
       msg.msg = $("<div></div>").text(msg.msg).html();
       if (msg.s) { // Special message
         if (msg.urls.length > 0) {
-          msg.icon = this.media[msg.urls[0].type].icon;
+          msg.icon = this.media[msg.urls[0].type] ? this.media[msg.urls[0].type].icon : "";
         } else {
           msg.icon = "";
         }
@@ -130,7 +130,12 @@
         var media = element.find('.urls');
 
         $.each(msg.urls, function (indx, url) {
-          var mediaElement = self.media[url.type].createElement(url, msg);
+          var mediaElement;
+          if (self.media[url.type]) {
+            mediaElement = self.media[url.type].createElement(url, msg);
+          } else {
+            mediaElement = self.media.html.createElement(url, msg);
+          }
           media.append(mediaElement);
         });
 

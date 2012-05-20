@@ -105,6 +105,11 @@
             <a target="_blank" href="<%=url.url%>"><img src="<%=url.url%>"/></a>
         </div>
     </script>
+    <script id="media-html-template" type="text/template">
+        <div class="media">
+            <%=((url && url.metadata && url.metadata.content && url.metadata.content.src) ? url.metadata.content.src : "")%>
+        </div>
+    </script>
     <script id="special-message-template" type="text/template">
         <div class="message">
 

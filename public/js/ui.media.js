@@ -1,6 +1,15 @@
 (function (window, undefined) {
   var ui = {
     media: {
+      html: {
+        icon: "/img/icons/vimeo.png",
+        createElement: function (url, msg) {
+          var html = tmpl($('#media-html-template').html(), {url: url, msg: msg});
+          console.log(html);
+          var element = $(html);
+          return element;
+        }
+      },
       image: {
         icon: "/img/icons/vimeo.png",
         createElement: function (url, msg) {
@@ -17,7 +26,7 @@
             url.metadata.fullDescription = url.metadata.description;
             url.metadata.description = url.metadata.description.substring(0, 450) + "...";
           }
-          
+
           var html = tmpl($('#media-website-template').html(), {url: url, msg: msg});
           var media = $(html);
 
@@ -35,10 +44,11 @@
           return media;
         }
       },
-      youtube: {
+      video: {
         icon: "/img/icons/vimeo.png",
         createElement: function (url, msg) {
 
+          url.metadata.description = url.metadata.description || "";
           if (url.metadata.description.length > 450) {
             url.metadata.fullDescription = url.metadata.description;
             url.metadata.description = url.metadata.description.substring(0, 450) + "...";
@@ -58,18 +68,19 @@
               var src = decodeURI(item.data('src'));
               var type = item.data('type');
 
-              switch(type) {
-                case "iframe":
-                  var element = $(src);
-                  element.width(item.find('img').width());
-                  element.height(item.find('img').height());
-                  item.parent().append(element);
-                  item.remove();
+              switch (type) {
+              case "html":
+              case "iframe":
+                var element = $(src);
+                element.width(item.find('img').width());
+                element.height(item.find('img').height());
+                item.parent().append(element);
+                item.remove();
                 break;
-                case "application/x-shockwave-flash":
-                  var element = $('<object width="' + item.find('img').width() + '" height="' + item.find('img').height() + '"><param name="movie" value="' + src + '"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="' + src + '" type="application/x-shockwave-flash" width="' + item.find('img').width() + '" height="' + item.find('img').height() + '" allowscriptaccess="always" allowfullscreen="true"></embed></object>');
-                  item.parent().append(element);
-                  item.remove();
+              case "application/x-shockwave-flash":
+                var element = $('<object width="' + item.find('img').width() + '" height="' + item.find('img').height() + '"><param name="movie" value="' + src + '"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="' + src + '" type="application/x-shockwave-flash" width="' + item.find('img').width() + '" height="' + item.find('img').height() + '" allowscriptaccess="always" allowfullscreen="true"></embed></object>');
+                item.parent().append(element);
+                item.remove();
                 break;
               }
 
@@ -86,7 +97,19 @@
       vimeo: {
         icon: "/img/icons/vimeo.png",
         createElement: function (url, msg) {
-          return window.ui.media.youtube.createElement(url, msg);
+          return window.ui.media.video.createElement(url, msg);
+        }
+      },
+      youtube: {
+        icon: "/img/icons/vimeo.png",
+        createElement: function (url, msg) {
+          return window.ui.media.video.createElement(url, msg);
+        }
+      },
+      collegehumor: {
+        icon: "/img/icons/vimeo.png",
+        createElement: function (url, msg) {
+          return window.ui.media.video.createElement(url, msg);
         }
       }
     }
