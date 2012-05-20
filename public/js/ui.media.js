@@ -48,6 +48,7 @@
         icon: "/img/icons/vimeo.png",
         createElement: function (url, msg) {
 
+          url.metadata = url.metadata || {};
           url.metadata.description = url.metadata.description || "";
           if (url.metadata.description.length > 450) {
             url.metadata.fullDescription = url.metadata.description;
