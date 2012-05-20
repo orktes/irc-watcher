@@ -1,5 +1,6 @@
 $(function () {
   window.ui.initSidebar();
+  window.ui.initSearch();
 
   function processHash() {
     var hash = window.location.hash || "#!/special";
@@ -24,7 +25,8 @@ $(function () {
 
   function prettyTime() {
     $('.pretty-time').each(function (indx, item) {
-      $(item).html(window.utils.convertDateToText(item.data('ts')));
+      item = $(item);
+      item.html(window.utils.convertDateToText(item.data('ts')));
     });
   }
 

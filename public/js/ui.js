@@ -98,7 +98,9 @@
             }
             break;
           case "search":
-            return false;
+            if (prepend) {
+              return false;
+            }
             break;
         }
       }
@@ -155,6 +157,13 @@
       this.filterType = type;
       this.filterValue = value;
       this.loadMoreMessages(20);
+
+      if (type != "search") {
+        $('input.search').val("");
+      } else {
+        $('input.search').val(value);
+      }
+
     },
     loadMoreMessages: function (count) {
       var self = this;
@@ -200,6 +209,36 @@
             self.addMessage(item);
           });
         }
+      });
+    },
+    initSearch : function () {
+      var lastSearch, searchTimeout, search, self;
+      self = this;
+
+      search = $('input.search');
+
+      search.parent().submit(function (e) {
+        var value = search.val();
+        var hash = "#!/search/" + encodeURIComponent(value);
+
+        if (document.location.hash != hash) {
+          document.location = hash;
+        } else {
+          window.ui.initMessages("search", self.filterValue);
+        }
+
+        lastSearch = value;
+
+        e.preventDefault();
+      });
+
+      search.keypress(function (e) {
+        var item = $(this);
+        window.ui.clearMessages();
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(function () {
+          item.parent().submit();
+        }, 2000);
       });
     }
   };
