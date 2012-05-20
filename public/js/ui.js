@@ -223,6 +223,7 @@
       search = $('input.search');
 
       search.parent().submit(function (e) {
+        clearTimeout(searchTimeout);
         var value = search.val();
         var hash = "#!/search/" + encodeURIComponent(value);
 
